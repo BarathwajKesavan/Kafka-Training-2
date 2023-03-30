@@ -31,8 +31,8 @@ public class ConsumerDemo {
         property.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         property.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
         KafkaConsumer<String,String> consumer= new KafkaConsumer<String, String>(property);
-        //consumer.subscribe(Arrays.asList(topic)); dont use topic while using offset. Either of offset or topic has to be used
-        TopicPartition partitionToRead = new TopicPartition(topic,1);
+       // consumer.subscribe(Arrays.asList(topic)); //dont use topic while using offset. Either of offset or topic has to be used
+        TopicPartition partitionToRead = new TopicPartition(topic,0);
         long offset = 5L;
         consumer.assign(Arrays.asList(partitionToRead));
         consumer.seek(partitionToRead,offset);
