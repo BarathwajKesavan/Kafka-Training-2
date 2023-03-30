@@ -3,6 +3,7 @@ package com.kafka;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,11 @@ public class ConsumerDemo {
         property.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         property.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
         KafkaConsumer<String,String> consumer= new KafkaConsumer<String, String>(property);
-        consumer.subscribe(Arrays.asList(topic));
+        //consumer.subscribe(Arrays.asList(topic)); dont use topic while using offset. Either of offset or topic has to be used
+        TopicPartition partitionToRead = new TopicPartition(topic,1);
+        long offset = 5L;
+        consumer.assign(Arrays.asList(partitionToRead));
+        consumer.seek(partitionToRead,offset);
 
         while(true){
             ConsumerRecords<String,String> records = consumer.poll(Duration.ofMillis(100));
